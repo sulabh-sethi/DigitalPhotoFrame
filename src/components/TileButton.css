@@ -1,0 +1,39 @@
+.tile-button {
+  width: 420px;
+  height: 320px;
+  border-radius: 28px;
+  border: none;
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  padding: 2rem;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 1rem;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+.tile-button:hover,
+.tile-button:focus-visible {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+  background: rgba(0, 173, 181, 0.2);
+}
+
+.tile-button__icon {
+  font-size: 3rem;
+}
+
+.tile-button__title {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.tile-button__description {
+  margin: 0;
+  opacity: 0.8;
+  font-size: 1.1rem;
+}

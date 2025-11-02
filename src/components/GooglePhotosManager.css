@@ -1,0 +1,151 @@
+.google-manager {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 7, 10, 0.92);
+  color: #f5f5f5;
+  z-index: 55;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(20px);
+}
+
+.google-manager__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.google-manager__header button {
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: inherit;
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.google-manager__content {
+  flex: 1;
+  display: flex;
+  padding: 2rem 3rem;
+  overflow-y: auto;
+}
+
+.google-manager__auth {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  align-items: center;
+}
+
+.google-manager__code {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1.5rem;
+  border-radius: 20px;
+}
+
+.google-manager__code img {
+  width: 220px;
+  height: 220px;
+}
+
+.google-manager__code strong {
+  display: block;
+  font-size: 2rem;
+  letter-spacing: 0.2em;
+}
+
+.google-manager__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.google-manager__actions button {
+  border: none;
+  background: rgba(0, 173, 181, 0.35);
+  color: inherit;
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.google-manager__error {
+  color: #ff8a80;
+}
+
+.google-manager__albums {
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.google-manager__albums header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.google-manager__album-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.google-manager__album-actions button {
+  border: none;
+  background: rgba(0, 173, 181, 0.3);
+  padding: 0.6rem 1.1rem;
+  border-radius: 10px;
+  color: inherit;
+  cursor: pointer;
+}
+
+.google-manager__album-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.google-manager__album-list label {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  padding: 0.8rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.google-manager__album-list small {
+  display: block;
+  opacity: 0.7;
+}
+
+.google-manager__album-footer {
+  display: flex;
+  gap: 1rem;
+}
+
+.google-manager__album-footer button {
+  border: none;
+  background: rgba(255, 255, 255, 0.16);
+  color: inherit;
+  padding: 0.7rem 1.4rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.google-manager__album-footer button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
