@@ -1,0 +1,232 @@
+ **React-based PWA**, optimized for Android TV, directly integrating with **Google Photos API** and **OpenWeatherMap** (no backend middleware).
+production-grade Product Requirements Document (PRD)** for **Digital FotoFrame**, 
+
+---
+
+## 📘 PRODUCT REQUIREMENTS DOCUMENT (PRD)
+
+### Product Name: **Digital FotoFrame (PWA for Android TV)**
+
+### Version: 1.0
+
+### Owner: Product Owner (You)
+
+### Platform: Android TV (Progressive Web App)
+
+---
+
+### 1. 🎯 Product Vision
+
+**Digital FotoFrame** transforms any Android TV into a smart, connected photo frame that auto-displays personal photos from **USB/local storage** or **Google Photos albums**.
+It aims to provide a **hands-free, minimalist, ambient experience** that feels native to the TV — with auto-sync, weather overlays, and elegant motion effects.
+
+---
+
+### 2. 🧭 Objectives
+
+* Create a **full-screen, distraction-free slideshow** experience.
+* Enable **quick setup** via QR-based Google account linking.
+* Support **multiple users and persistent login sessions**.
+* Offer **deep personalization** — clock, transitions, brightness, music, etc.
+* Integrate **live weather and time overlays** seamlessly.
+* Work **offline** when showing USB/local photos.
+
+---
+
+### 3. 👥 Target Users
+
+* Home users wanting a personal digital photo frame experience.
+* Families sharing albums via Google Photos.
+* Retail or hospitality setups needing rotating image displays.
+
+---
+
+### 4. 🧩 Core Features & Requirements
+
+#### 4.1 Landing / Welcome Screen
+
+* Full-screen welcome logo animation (“Digital FotoFrame”).
+* Options displayed in large tiles:
+
+  1. **Select Folder (USB/Local)**
+  2. **Connect Google Photos Account (QR Login)**
+* Persistent top bar:
+
+  * **Left:** ⚙️ *Customize* button
+  * **Right:** 🌙 *Theme Toggle* (Light / Dark)
+
+---
+
+#### 4.2 Folder Source: USB / Local Storage
+
+* Detect connected USB storage and list folder hierarchy.
+* Allow user to select one or more folders.
+* Option to enable recursive scanning (include subfolders).
+* Auto-start slideshow once folder(s) are selected.
+
+---
+
+#### 4.3 Google Photos Integration
+
+* Show “Connect Google Account” tile with QR code.
+* QR leads to OAuth consent screen on user’s mobile.
+* After successful login, app stores access token locally (indexedDB/localStorage).
+* User selects **specific albums** to include in the slideshow.
+* Automatically syncs new photos if added to the same albums.
+* Supports multiple Google accounts — user can switch accounts.
+* Persist login session across reboots until manual logout.
+
+---
+
+#### 4.4 Slideshow Mode
+
+* Auto slideshow starts when source (local or Google Photos) is ready.
+* Transition effects supported:
+
+  * **Fade, Pan, Zoom, Slide, Ken Burns effect**.
+* Slideshow interval customizable (default: 8s).
+* Smooth cross-fades between photos.
+* Local caching of next N images for seamless transitions.
+* Background color adapts to theme.
+* Optional background ambient music (toggleable).
+
+---
+
+#### 4.5 Customization Panel (Top Left)
+
+Accessible anytime (overlay or via remote “Menu” key).
+
+| Setting Category   | Options                                                     |
+| ------------------ | ----------------------------------------------------------- |
+| **Clock**          | Show/Hide, Position (4 corners), Analog/Digital, 12/24-hour |
+| **Font & Display** | Font family (2–3), Font size slider                         |
+| **Transitions**    | Ken Burns, Pan, Zoom, Fade, Slide                           |
+| **Interval**       | Adjustable (3–30 sec)                                       |
+| **Visuals**        | Brightness / Contrast / Transparency                        |
+| **Startup**        | Auto-start slideshow on TV boot                             |
+| **Audio**          | Enable/Disable ambient music, select from preset tracks     |
+| **Weather Widget** | On/Off toggle                                               |
+| **Logout**         | Logout current Google account                               |
+
+---
+
+#### 4.6 Weather Widget
+
+* Uses **OpenWeatherMap API**.
+* Fetches weather based on **geolocation or user-set city**.
+* Displays temperature + weather icon (top-right overlay).
+* Refreshes every 15 minutes.
+
+---
+
+#### 4.7 Theming
+
+* Global toggle (top-right icon).
+* Two themes:
+
+  * **Light:** clean white with subtle gray overlays.
+  * **Dark:** black background, neon/gray minimal overlays.
+* Theme applies to all screens, saved in local storage.
+
+---
+
+### 5. 🧭 User Flows
+
+#### 5.1 First Launch
+
+```
+[Welcome Screen] → Choose Source → (USB Folder / Google Photos) → Slideshow Starts
+```
+
+#### 5.2 Google Login Flow
+
+```
+Show QR → Scan via Mobile → Google OAuth Consent → Redirects to success → TV auto-links → Album Selection → Slideshow
+```
+
+#### 5.3 Customization Flow
+
+```
+Slideshow → Press Menu / Customize → Overlay Panel → Adjust Settings → Auto-save Preferences
+```
+
+---
+
+### 6. 🖥️ UI / UX Design Principles
+
+* **Minimalist:** full-bleed images, subtle overlays only when necessary.
+* **TV-Optimized Layout:** navigation via D-Pad + OK button.
+* **Large Targets:** 48px min button height.
+* **Animations:** use `react-spring` or `framer-motion` for smooth transitions.
+* **Responsive:** scales to 1080p and 4K TVs.
+* **Fonts:** Sans-serif, high contrast for readability.
+
+---
+
+### 7. 🧱 Technical Architecture
+
+| Component                | Technology                                                           |
+| ------------------------ | -------------------------------------------------------------------- |
+| **Frontend Framework**   | React + TypeScript                                                   |
+| **UI Framework**         | Tailwind CSS / Material UI                                           |
+| **Routing**              | React Router                                                         |
+| **Storage**              | IndexedDB for tokens, settings, and local cache                      |
+| **Authentication**       | Google OAuth 2.0 (via QR + device linking flow)                      |
+| **APIs**                 | Google Photos REST API, OpenWeatherMap API                           |
+| **PWA Capabilities**     | Service Worker caching, offline fallback for local folders           |
+| **TV Remote Navigation** | DPAD events + focus management via `react-tv-navigation`             |
+| **Build Target**         | Android TV WebView or browser-based app launcher                     |
+| **Deployment**           | Hosted as HTTPS PWA, installable via TV browser “Add to Home Screen” |
+
+---
+
+### 8. ⚙️ Non-Functional Requirements
+
+| Category          | Requirement                                                             |
+| ----------------- | ----------------------------------------------------------------------- |
+| **Performance**   | Load within 3s; maintain 60 FPS transitions                             |
+| **Offline Mode**  | USB/local slideshow must work fully offline                             |
+| **Security**      | Store OAuth tokens securely in local storage (refresh tokens encrypted) |
+| **Reliability**   | Resume last slideshow on restart                                        |
+| **Scalability**   | Support up to 10,000 photos in rotation                                 |
+| **Compatibility** | Android TV OS 10+ (Chromium-based WebView)                              |
+| **Localization**  | English (v1); extensible for future i18n                                |
+| **Accessibility** | Font scaling; minimal color flashing                                    |
+| **Logging**       | Local-only (no cloud analytics)                                         |
+
+---
+
+### 9. 🔄 Future Enhancements
+
+* **AI-powered face clustering** (“Show only family/friends”)
+* **Voice control via Google Assistant**
+* **OneDrive / Dropbox integration**
+* **Smart album rotation based on seasons or events**
+* **Companion mobile app for remote customization**
+
+---
+
+### 10. 📋 Acceptance Criteria Summary
+
+| Feature       | Acceptance Criteria                                      |
+| ------------- | -------------------------------------------------------- |
+| Google Login  | QR-based auth works and session persists post-reboot     |
+| Slideshow     | Automatically starts after folder selection              |
+| USB Access    | Can browse and select folder(s) successfully             |
+| Customization | All settings instantly reflected in slideshow            |
+| Theme Toggle  | Immediate UI switch between light/dark                   |
+| Weather       | Displays correct live data from OpenWeatherMap           |
+| Multi-User    | Can switch between Google accounts without reinstall     |
+| Offline Mode  | Works fully offline for local photos                     |
+| Auto Sync     | Detects new Google Photos in linked album within 15 mins |
+
+---
+
+### 11. 🧭 User Stories (Sample)
+
+1. As a user, I want to **scan a QR code on TV** to log into Google Photos without typing credentials.
+2. As a user, I want to **select specific albums** from my Google Photos for the slideshow.
+3. As a user, I want to **customize slideshow effects and speed** to match my preferences.
+4. As a user, I want the **clock and weather widget** to appear unobtrusively during slideshow.
+5. As a user, I want the **TV to auto-start slideshow on boot** so I don’t have to reopen the app.
+
