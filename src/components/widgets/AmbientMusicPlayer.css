@@ -1,0 +1,24 @@
+.ambient-player {
+  position: fixed;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.35);
+  color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  backdrop-filter: blur(14px);
+  z-index: 32;
+}
+
+.ambient-player button {
+  border: none;
+  background: rgba(0, 173, 181, 0.35);
+  color: inherit;
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
