@@ -75,11 +75,11 @@ DigitalPhotoFrame/
 
    | Variable | Description |
    |----------|-------------|
-  | `VITE_GOOGLE_CLIENT_ID` | OAuth 2.0 client ID with Google Photos API enabled (optional if set via Customize → Integrations). |
-  | `VITE_GOOGLE_CLIENT_SECRET` *(optional)* | Required only when using refresh tokens on web. |
-  | `VITE_OPEN_WEATHER_API_KEY` | OpenWeatherMap API key for the weather widget. |
+   | `VITE_GOOGLE_CLIENT_ID` | OAuth 2.0 client ID with Google Photos API enabled. |
+   | `VITE_GOOGLE_CLIENT_SECRET` *(optional)* | Required only when using refresh tokens on web. |
+   | `VITE_OPEN_WEATHER_API_KEY` | OpenWeatherMap API key for the weather widget. |
 
-  > **Tip:** The customization panel allows entering the Google client ID, weather API key, or manual city per device if you prefer not to bake them into the build.
+   > **Tip:** The customization panel also allows entering the weather API key or manual city per device if you prefer not to bake it into the build.
 
 3. **Run locally**
    ```bash

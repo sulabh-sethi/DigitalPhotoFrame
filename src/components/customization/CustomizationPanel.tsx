@@ -269,29 +269,6 @@ const CustomizationPanel: React.FC<CustomizationPanelProps> = ({ isOpen, onClose
         </section>
         <section>
           <header>
-            <h3>Integrations</h3>
-          </header>
-          <label>
-            Google OAuth Client ID
-            <input
-              type="text"
-              value={settings.integrations.googleClientId ?? ''}
-              onChange={(event) =>
-                handleChange('integrations', {
-                  ...settings.integrations,
-                  googleClientId: event.target.value
-                })
-              }
-              placeholder="Paste your OAuth client ID"
-            />
-          </label>
-          <p className="customization-panel__hint">
-            Use the client ID from your Google Cloud console or define <code>VITE_GOOGLE_CLIENT_ID</code> in a
-            <code>.env</code> file.
-          </p>
-        </section>
-        <section>
-          <header>
             <h3>Weather</h3>
           </header>
           <label className="customization-panel__toggle">

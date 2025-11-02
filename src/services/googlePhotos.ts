@@ -46,41 +46,9 @@ interface GoogleApiError {
   error: { code: number; message: string };
 }
 
+const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = import.meta.env.VITE_GOOGLE_CLIENT_SECRET;
 const SCOPES = 'https://www.googleapis.com/auth/photoslibrary.readonly';
-const SETTINGS_STORAGE_KEY = 'digital-fotoframe::settings';
-
-function resolveClientId(): string | undefined {
-  if (typeof window !== 'undefined') {
-    try {
-      const raw = window.localStorage.getItem(SETTINGS_STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        const stored = parsed?.integrations?.googleClientId;
-        if (typeof stored === 'string' && stored.trim().length > 0) {
-          return stored.trim();
-        }
-      }
-    } catch (error) {
-      console.warn('Unable to read stored Google client configuration', error);
-    }
-  }
-  const fromEnv = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-  if (typeof fromEnv === 'string' && fromEnv.trim().length > 0) {
-    return fromEnv.trim();
-  }
-  return undefined;
-}
-
-function requireClientId(): string {
-  const clientId = resolveClientId();
-  if (!clientId) {
-    throw new Error(
-      'Provide a Google OAuth client ID under Customize → Integrations or set VITE_GOOGLE_CLIENT_ID in your .env file.'
-    );
-  }
-  return clientId;
-}
 
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
@@ -91,7 +59,9 @@ async function handleResponse<T>(response: Response): Promise<T> {
 }
 
 export async function requestDeviceCode(): Promise<DeviceCodeResponse> {
-  const clientId = requireClientId();
+  if (!CLIENT_ID) {
+    throw new Error('Missing Google OAuth client id (VITE_GOOGLE_CLIENT_ID).');
+  }
 
   const response = await fetch(DEVICE_CODE_ENDPOINT, {
     method: 'POST',
@@ -99,7 +69,7 @@ export async function requestDeviceCode(): Promise<DeviceCodeResponse> {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
     body: new URLSearchParams({
-      client_id: clientId,
+      client_id: CLIENT_ID,
       scope: SCOPES
     })
   });
@@ -112,7 +82,9 @@ export async function pollForDeviceToken(
   signal: AbortSignal,
   intervalSeconds = 5
 ): Promise<TokenSuccessResponse> {
-  const clientId = requireClientId();
+  if (!CLIENT_ID) {
+    throw new Error('Missing Google OAuth client id (VITE_GOOGLE_CLIENT_ID).');
+  }
 
   while (!signal.aborted) {
     const response = await fetch(TOKEN_ENDPOINT, {
@@ -121,7 +93,7 @@ export async function pollForDeviceToken(
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: new URLSearchParams({
-        client_id: clientId,
+        client_id: CLIENT_ID,
         client_secret: CLIENT_SECRET ?? '',
         device_code: deviceCode,
         grant_type: 'urn:ietf:params:oauth:grant-type:device_code'
@@ -148,8 +120,7 @@ export async function pollForDeviceToken(
 }
 
 export async function refreshAccessToken(accountId: string): Promise<GoogleAuthTokens | undefined> {
-  const clientId = resolveClientId();
-  if (!clientId || !CLIENT_SECRET) {
+  if (!CLIENT_ID || !CLIENT_SECRET) {
     return undefined;
   }
   const existing = await getGoogleTokens(accountId);
@@ -159,7 +130,7 @@ export async function refreshAccessToken(accountId: string): Promise<GoogleAuthT
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
-      client_id: clientId,
+      client_id: CLIENT_ID,
       client_secret: CLIENT_SECRET,
       grant_type: 'refresh_token',
       refresh_token: existing.refreshToken

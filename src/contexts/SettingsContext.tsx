@@ -8,10 +8,6 @@ export type TransitionEffect = 'fade' | 'pan' | 'zoom' | 'slide' | 'kenburns';
 export type WeatherUnits = 'metric' | 'imperial';
 export type AmbientSoundscape = 'aurora' | 'focus' | 'waves';
 
-export interface IntegrationSettings {
-  googleClientId?: string;
-}
-
 export interface ClockSettings {
   enabled: boolean;
   position: ClockPosition;
@@ -63,7 +59,6 @@ export interface SettingsState {
   startup: StartupSettings;
   audio: AudioSettings;
   weather: WeatherSettings;
-  integrations: IntegrationSettings;
 }
 
 export interface SettingsContextValue {
@@ -110,9 +105,6 @@ const defaultSettings: SettingsState = {
     apiKey: undefined,
     units: 'metric',
     refreshMinutes: 15
-  },
-  integrations: {
-    googleClientId: import.meta.env.VITE_GOOGLE_CLIENT_ID ?? ''
   }
 };
 
