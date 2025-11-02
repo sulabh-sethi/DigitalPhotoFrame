@@ -1,0 +1,87 @@
+.clock-widget {
+  position: fixed;
+  z-index: 35;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-weight: 500;
+  text-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+.clock-widget--top-left {
+  top: 5rem;
+  left: 3rem;
+  align-items: flex-start;
+}
+
+.clock-widget--top-right {
+  top: 5rem;
+  right: 3rem;
+}
+
+.clock-widget--bottom-left {
+  bottom: 3rem;
+  left: 3rem;
+  align-items: flex-start;
+}
+
+.clock-widget--bottom-right {
+  bottom: 3rem;
+  right: 3rem;
+}
+
+.clock-widget__digital {
+  display: flex;
+  flex-direction: column;
+  align-items: inherit;
+  gap: 0.2rem;
+}
+
+.clock-widget__time {
+  font-size: 3rem;
+}
+
+.clock-widget__date {
+  font-size: 1.1rem;
+  opacity: 0.85;
+}
+
+.analog-clock {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 6px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(12px);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.analog-clock__hand {
+  position: absolute;
+  width: 4px;
+  height: 45%;
+  background: rgba(255, 255, 255, 0.85);
+  transform-origin: 50% 100%;
+  border-radius: 999px;
+}
+
+.analog-clock__hand--hour {
+  height: 30%;
+  width: 6px;
+}
+
+.analog-clock__hand--second {
+  background: #00adb5;
+  width: 2px;
+}
+
+.analog-clock__center {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #00adb5;
+}

@@ -1,0 +1,30 @@
+{
+  "name": "digital-fotoframe",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit --skipLibCheck",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "classnames": "^2.5.1",
+    "framer-motion": "^10.16.4",
+    "idb-keyval": "^6.2.1",
+    "qrcode": "^1.5.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@types/node": "^20.14.11",
+    "@types/qrcode": "^1.5.5",
+    "@vitejs/plugin-react-swc": "^3.6.0",
+    "typescript": "^5.5.4",
+    "vite": "^5.0.0"
+  }
+}
