@@ -39,6 +39,7 @@ yarn-error.log*
 *.msi
 *.apk
 *.ipa
+*.png
 
 # OS generated files
 .DS_Store
