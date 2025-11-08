@@ -50,6 +50,8 @@ const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = import.meta.env.VITE_GOOGLE_CLIENT_SECRET;
 const SCOPES = 'https://www.googleapis.com/auth/photoslibrary.readonly';
 
+export const isGoogleAuthConfigured = Boolean(CLIENT_ID);
+
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
     const error = (await response.json().catch(() => ({ error: { message: response.statusText } }))) as GoogleApiError;
@@ -60,7 +62,9 @@ async function handleResponse<T>(response: Response): Promise<T> {
 
 export async function requestDeviceCode(): Promise<DeviceCodeResponse> {
   if (!CLIENT_ID) {
-    throw new Error('Missing Google OAuth client id (VITE_GOOGLE_CLIENT_ID).');
+    throw new Error(
+      'Google Photos linking requires configuring VITE_GOOGLE_CLIENT_ID. Add your OAuth client id to the environment variables.'
+    );
   }
 
   const response = await fetch(DEVICE_CODE_ENDPOINT, {
@@ -83,7 +87,9 @@ export async function pollForDeviceToken(
   intervalSeconds = 5
 ): Promise<TokenSuccessResponse> {
   if (!CLIENT_ID) {
-    throw new Error('Missing Google OAuth client id (VITE_GOOGLE_CLIENT_ID).');
+    throw new Error(
+      'Google Photos linking requires configuring VITE_GOOGLE_CLIENT_ID. Add your OAuth client id to the environment variables.'
+    );
   }
 
   while (!signal.aborted) {
