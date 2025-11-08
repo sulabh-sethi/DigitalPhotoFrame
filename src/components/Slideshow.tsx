@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useSettings } from '../contexts/SettingsContext';
+import { TransitionEffect, useSettings } from '../contexts/SettingsContext';
 import { useSlideshow } from '../hooks/useSlideshow';
 import { PhotoItem, PhotoSource } from '../utils/types';
 import ClockWidget from './widgets/ClockWidget';
@@ -14,7 +14,13 @@ interface SlideshowProps {
   onExit: () => void;
 }
 
-const transitionVariants = {
+type TransitionVariant = {
+  initial: Record<string, unknown>;
+  animate: Record<string, unknown>;
+  exit: Record<string, unknown>;
+};
+
+const transitionVariants: Record<TransitionEffect, TransitionVariant> = {
   fade: {
     initial: { opacity: 0 },
     animate: { opacity: 1 },
@@ -42,14 +48,39 @@ const transitionVariants = {
   }
 };
 
+const safeModeVariants: Partial<Record<TransitionEffect, TransitionVariant>> = {
+  fade: transitionVariants.fade,
+  zoom: {
+    initial: { scale: 1.02, opacity: 0 },
+    animate: { scale: 1, opacity: 1 },
+    exit: { scale: 1.03, opacity: 0 }
+  }
+};
+
+const resolveSafeEffect = (effect: TransitionEffect): TransitionEffect => {
+  if (effect === 'zoom') {
+    return 'zoom';
+  }
+  return 'fade';
+};
+
+const SAFE_MODE_MIN_INTERVAL_SECONDS = 12;
+
 const Slideshow: React.FC<SlideshowProps> = ({ photos, source, onExit }) => {
   const {
     settings: { transitions, visuals, font }
   } = useSettings();
+  const safeModeActive = transitions.ambientSafeMode;
+  const effectiveEffect = safeModeActive ? resolveSafeEffect(transitions.effect) : transitions.effect;
+  const effectiveIntervalSeconds = safeModeActive
+    ? Math.max(transitions.intervalSeconds, SAFE_MODE_MIN_INTERVAL_SECONDS)
+    : transitions.intervalSeconds;
+  const preloadCount = safeModeActive ? 1 : 2;
 
   const slideshow = useSlideshow(photos, {
-    intervalSeconds: transitions.intervalSeconds,
-    effect: transitions.effect
+    intervalSeconds: effectiveIntervalSeconds,
+    effect: effectiveEffect,
+    preloadCount
   });
 
   useEffect(() => {
@@ -81,7 +112,9 @@ const Slideshow: React.FC<SlideshowProps> = ({ photos, source, onExit }) => {
     );
   }
 
-  const variant = transitionVariants[transitions.effect];
+  const variant = (safeModeActive ? safeModeVariants[effectiveEffect] : transitionVariants[effectiveEffect])
+    ?? transitionVariants.fade;
+  const transitionDuration = safeModeActive ? 0.9 : 1.5;
 
   return (
     <div className="slideshow" style={{ fontFamily: font.family, fontSize: `${font.scale}em` }}>
@@ -94,13 +127,19 @@ const Slideshow: React.FC<SlideshowProps> = ({ photos, source, onExit }) => {
           initial={variant.initial}
           animate={variant.animate}
           exit={variant.exit}
-          transition={{ duration: 1.5, ease: 'easeInOut' }}
+          transition={{ duration: transitionDuration, ease: 'easeInOut' }}
           style={{
             filter: `brightness(${visuals.brightness}) contrast(${visuals.contrast})`,
             transformOrigin: 'center'
           }}
         />
       </AnimatePresence>
+      {safeModeActive && (
+        <div className="slideshow__indicator" role="status" aria-live="polite">
+          <strong>Ambient Safe Mode</strong>
+          <span>Motion reduced to protect your display</span>
+        </div>
+      )}
       <div className="slideshow__overlay" style={{ background: `rgba(0, 0, 0, ${visuals.overlayOpacity})` }}>
         <div className="slideshow__meta">
           {source && (
