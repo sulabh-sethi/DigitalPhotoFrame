@@ -15,13 +15,13 @@ export interface SlideshowControls {
 
 export interface SlideshowOptions {
   intervalSeconds: number;
-  effect: TransitionEffect;
+  effect?: TransitionEffect;
   preloadCount?: number;
 }
 
 export const useSlideshow = (
   photos: PhotoItem[],
-  { intervalSeconds, preloadCount = 2 }: SlideshowOptions
+  { intervalSeconds, preloadCount = 2, effect }: SlideshowOptions
 ): SlideshowControls => {
   const [index, setIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -30,7 +30,7 @@ export const useSlideshow = (
 
   useEffect(() => {
     setIndex(0);
-  }, [photos]);
+  }, [photos, effect]);
 
   useEffect(() => {
     if (!isPlaying || photos.length === 0) return;

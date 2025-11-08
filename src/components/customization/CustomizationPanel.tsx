@@ -159,6 +159,22 @@ const CustomizationPanel: React.FC<CustomizationPanelProps> = ({ isOpen, onClose
               }
             />
           </label>
+          <label className="customization-panel__toggle">
+            <input
+              type="checkbox"
+              checked={settings.transitions.ambientSafeMode}
+              onChange={(event) =>
+                handleChange('transitions', {
+                  ...settings.transitions,
+                  ambientSafeMode: event.target.checked
+                })
+              }
+            />
+            Ambient Safe Mode
+          </label>
+          <p className="customization-panel__hint">
+            Slows transitions and reduces motion intensity to help protect OLED and QLED panels during long viewing sessions.
+          </p>
         </section>
         <section>
           <header>
