@@ -43,6 +43,23 @@
   align-items: center;
 }
 
+.google-manager__auth--disabled {
+  background: rgba(255, 255, 255, 0.06);
+  padding: 1.5rem 2rem;
+  border-radius: 18px;
+  line-height: 1.6;
+  gap: 0.8rem;
+}
+
+.google-manager__auth--disabled code {
+  display: inline-block;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
 .google-manager__code {
   display: flex;
   gap: 1.5rem;

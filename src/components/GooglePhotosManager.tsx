@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import QRCode from 'qrcode';
+import { isGoogleAuthConfigured } from '../services/googlePhotos';
 import { GooglePhotosHook } from '../hooks/useGooglePhotos';
 import './GooglePhotosManager.css';
 
@@ -14,6 +15,7 @@ const GooglePhotosManager: React.FC<GooglePhotosManagerProps> = ({ google, onClo
   const [qrDataUrl, setQrDataUrl] = useState<string>('');
 
   const deviceCode = google.deviceAuth.code;
+  const googleAuthAvailable = isGoogleAuthConfigured;
 
   useEffect(() => {
     setSelected(google.selectedAlbumIds);
@@ -45,7 +47,7 @@ const GooglePhotosManager: React.FC<GooglePhotosManagerProps> = ({ google, onClo
         <button onClick={onClose}>Close</button>
       </div>
       <div className="google-manager__content">
-        {!hasAccount && (
+        {!hasAccount && googleAuthAvailable && (
           <div className="google-manager__auth">
             <p>Link your Google account by scanning the QR code or visiting the URL below.</p>
             {deviceCode ? (
@@ -66,6 +68,16 @@ const GooglePhotosManager: React.FC<GooglePhotosManagerProps> = ({ google, onClo
             {google.deviceAuth.error && (
               <p className="google-manager__error">{google.deviceAuth.error}</p>
             )}
+          </div>
+        )}
+
+        {!hasAccount && !googleAuthAvailable && (
+          <div className="google-manager__auth google-manager__auth--disabled">
+            <p>
+              Google Photos linking is disabled because no OAuth client id is configured. Update your environment with{' '}
+              <code>VITE_GOOGLE_CLIENT_ID</code>{' '}
+              as described in the README, then reload the app to enable Google account pairing.
+            </p>
           </div>
         )}
 

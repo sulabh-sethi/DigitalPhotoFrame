@@ -23,6 +23,7 @@ export interface FontSettings {
 export interface TransitionSettings {
   effect: TransitionEffect;
   intervalSeconds: number;
+  ambientSafeMode: boolean;
 }
 
 export interface VisualSettings {
@@ -83,7 +84,8 @@ const defaultSettings: SettingsState = {
   },
   transitions: {
     effect: 'fade',
-    intervalSeconds: 8
+    intervalSeconds: 8,
+    ambientSafeMode: false
   },
   visuals: {
     brightness: 1,
@@ -110,13 +112,30 @@ const defaultSettings: SettingsState = {
 
 const SettingsContext = createContext<SettingsContextValue | undefined>(undefined);
 
+const mergeSettings = (stored: unknown): SettingsState => {
+  if (!stored || typeof stored !== 'object') {
+    return defaultSettings;
+  }
+  const partial = stored as Partial<SettingsState>;
+  return {
+    theme: partial.theme ?? defaultSettings.theme,
+    clock: { ...defaultSettings.clock, ...partial.clock },
+    font: { ...defaultSettings.font, ...partial.font },
+    transitions: { ...defaultSettings.transitions, ...partial.transitions },
+    visuals: { ...defaultSettings.visuals, ...partial.visuals },
+    startup: { ...defaultSettings.startup, ...partial.startup },
+    audio: { ...defaultSettings.audio, ...partial.audio },
+    weather: { ...defaultSettings.weather, ...partial.weather }
+  };
+};
+
 export const SettingsProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [settings, setSettings] = useState<SettingsState>(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return defaultSettings;
       const parsed = JSON.parse(raw);
-      return { ...defaultSettings, ...parsed } as SettingsState;
+      return mergeSettings(parsed);
     } catch (error) {
       console.warn('Unable to load stored settings', error);
       return defaultSettings;
